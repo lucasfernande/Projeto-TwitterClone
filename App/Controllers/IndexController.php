@@ -12,6 +12,12 @@
 		}
 
 		public function inscreverse() {
+			$this->view->usuario = array ( # array para colocar as informações no formulário novamente ao acontecer um erro
+					'nome' => '',
+					'email' => '',
+					'senha' => ''
+			);
+			$this->view->erroCadastro = false;
 			$this->render('inscreverse');
 		}
 
@@ -21,8 +27,20 @@
 			$usuario->__set('nome', $_POST['nome']);
 			$usuario->__set('email', $_POST['email']);
 			$usuario->__set('senha', $_POST['senha']);
-			$usuario->cadastrar();		
 
+			if ($usuario->validarCadastro() AND count($usuario->getUsuarioPorEmail()) == 0) {
+				$usuario->cadastrar();	
+				$this->render('cadastro'); # renderizando tela de cadastro com sucesso								
+			} 
+			else {
+				$this->view->usuario = array ( 
+					'nome' => $_POST['nome'],
+					'email' => $_POST['email'],
+					'senha' => $_POST['senha']
+				);
+				$this->view->erroCadastro = true;
+				$this->render('inscreverse');
+			}
 		}
 
 	}
