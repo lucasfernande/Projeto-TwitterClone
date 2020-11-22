@@ -48,6 +48,23 @@
 			return $statemt->fetchAll(\PDO::FETCH_ASSOC);
 		}
 
+		public function autenticar() {
+			$query = 'select id, nome, email from usuarios where email = :email AND senha = :senha';
+
+			$statemt = $this->db->prepare($query);
+			$statemt->bindValue(':email', $this->__get('email'));
+			$statemt->bindValue(':senha', $this->__get('senha'));
+			$statemt->execute();
+
+			$usuario = $statemt->fetch(\PDO::FETCH_OBJ);
+
+			if ($usuario->id != '' AND $usuario->nome != '') {
+				$this->__set('id', $usuario->id);
+				$this->__set('nome', $usuario->nome);
+			}
+			return $this;
+		}
+
 	}
 
 ?>
