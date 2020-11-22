@@ -66,10 +66,11 @@
 		}
 
 		public function pesquisar() {
-			$query = 'select id, nome, email from usuarios where nome like :nome';
+			$query = 'select id, nome, email from usuarios where nome like :nome and id != :id_usuario';
 
 			$statemt = $this->db->prepare($query);
 			$statemt->bindValue(':nome', '%'.$this->__get('nome').'%'); # pode ter qualquer string dos lados do nome pesquisado
+			$statemt->bindValue(':id_usuario', $this->__get('id')); # não será retornado o próprio usuário na pesquisa
 			$statemt->execute();
 
 			return $statemt->fetchAll(\PDO::FETCH_OBJ);
