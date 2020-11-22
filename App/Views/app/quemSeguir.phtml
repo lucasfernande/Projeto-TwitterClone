@@ -85,8 +85,13 @@
 										</div>							
 										<div class="col-md-6 d-flex justify-content-end">
 											<div>
-												<a href="#" class="btn btn-success">Seguir</a>
-												<a href="#" class="btn btn-danger">Deixar de seguir</a>
+												<?php if ($usuario->seguindoSN == 0) { # o botão seguir só irá aparecer se o usuário logado não estiver seguindo o usuário pesquisado ?> 
+													<a href="/acao?acao=seguir&id_usuario=<?=$usuario->id?>" class="btn btn-success">Seguir</a>
+												<?php } ?>
+
+												<?php if ($usuario->seguindoSN == 1) { # o botão deixa de seguir só irá aparecer se o usuário logado estiver seguindo o usuário pesquisado ?>
+													<a href="/acao?acao=deixarSeguir&id_usuario=<?=$usuario->id?>" class="btn btn-danger">Deixar de seguir</a>
+												<?php } ?>
 											</div>
 										</div>
 									</div>

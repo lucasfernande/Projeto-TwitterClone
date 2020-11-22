@@ -66,7 +66,18 @@
 		}
 
 		public function pesquisar() {
-			$query = 'select id, nome, email from usuarios where nome like :nome and id != :id_usuario';
+			$query = 'select 
+						u.id, u.nome, u.email,
+						(select 
+							count(*) 
+						from 
+							usuarios_seguidores as us 
+						where 
+							us.id_usuario = :id_usuario and us.id_usuario_seguindo = u.id) as seguindoSN 
+				  	  from 
+						usuarios as u 
+				 	  where 
+				  		u.nome like :nome and u.id != :id_usuario';
 
 			$statemt = $this->db->prepare($query);
 			$statemt->bindValue(':nome', '%'.$this->__get('nome').'%'); # pode ter qualquer string dos lados do nome pesquisado
@@ -74,6 +85,28 @@
 			$statemt->execute();
 
 			return $statemt->fetchAll(\PDO::FETCH_OBJ);
+		}
+
+		public function seguirUsuario($id_usuario_seguindo) {
+			$query = 'insert into usuarios_seguidores(id_usuario, id_usuario_seguindo)values(:id_usuario, :id_usuario_seguindo)';
+
+			$statemt = $this->db->prepare($query);
+			$statemt->bindValue(':id_usuario', $this->__get('id'));
+			$statemt->bindValue(':id_usuario_seguindo', $id_usuario_seguindo);
+			$statemt->execute();
+
+			return true;
+		}
+
+		public function deixarSeguirUsuario($id_usuario_seguindo) {
+			$query = 'delete from usuarios_seguidores where id_usuario = :id_usuario and id_usuario_seguindo = :id_usuario_seguindo';
+
+			$statemt = $this->db->prepare($query);
+			$statemt->bindValue(':id_usuario', $this->__get('id'));
+			$statemt->bindValue(':id_usuario_seguindo', $id_usuario_seguindo);
+			$statemt->execute();
+
+			return true;
 		}
 
 	}
