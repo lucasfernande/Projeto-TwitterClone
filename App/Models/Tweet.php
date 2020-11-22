@@ -27,6 +27,24 @@
 
 			return $this;
 		}
+
+		public function recuperarTweets() {
+			$query = 'select 
+						t.id, t.id_usuario, u.nome, t.tweet, DATE_FORMAT(t.data, "%d/%m/%Y %H:%i") as data 
+					  from 
+					  	tweets as t 
+					 	left join usuarios as u on(t.id_usuario = u.id)
+					  where 
+					  	t.id_usuario = :id_usuario
+					  order by 
+					  	t.data DESC';
+
+			$statemt = $this->db->prepare($query);
+			$statemt->bindValue(':id_usuario', $this->__get('id_usuario'));
+			$statemt->execute();
+
+			return $statemt->fetchAll(\PDO::FETCH_OBJ); # retornando um objeto literal com todos os tweets
+		}
 	}	
 
 ?>	
