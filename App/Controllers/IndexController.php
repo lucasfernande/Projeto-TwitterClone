@@ -27,7 +27,7 @@
 
 			$usuario->__set('nome', $_POST['nome']);
 			$usuario->__set('email', $_POST['email']);
-			$usuario->__set('senha', $_POST['senha']);
+			$usuario->__set('senha', md5($_POST['senha'])); # convertendo a senha para um hash de 32 caracteres
 
 			if ($usuario->validarCadastro() AND count($usuario->getUsuarioPorEmail()) == 0) {
 				$usuario->cadastrar();	
