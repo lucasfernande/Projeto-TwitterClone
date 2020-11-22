@@ -65,6 +65,16 @@
 			return $this;
 		}
 
+		public function pesquisar() {
+			$query = 'select id, nome, email from usuarios where nome like :nome';
+
+			$statemt = $this->db->prepare($query);
+			$statemt->bindValue(':nome', '%'.$this->__get('nome').'%'); # pode ter qualquer string dos lados do nome pesquisado
+			$statemt->execute();
+
+			return $statemt->fetchAll(\PDO::FETCH_OBJ);
+		}
+
 	}
 
 ?>

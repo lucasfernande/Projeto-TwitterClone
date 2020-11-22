@@ -42,6 +42,23 @@
 				header('Location: /?login=error');
 			}		
 		}
+
+		public function quemSeguir() {
+			$this->validaAutenticacao();
+
+			$usuarios = array(); # caso não seja encontrado nenhum usuário, será retornado um array vazio
+			$pesquisarPor = isset($_GET['pesquisarPor']) ? $_GET['pesquisarPor'] : '';
+
+			if ($pesquisarPor != '') {
+				$usuario = Container::getModel('Usuario');
+				$usuario->__set('nome', $pesquisarPor);
+
+				$usuarios = $usuario->pesquisar();
+			}
+
+			$this->view->usuarios = $usuarios;
+			$this->render('quemSeguir');
+		}	
 	}	
 
 ?>	
