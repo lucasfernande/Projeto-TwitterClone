@@ -15,12 +15,22 @@
 
 			$usuario->autenticar();
 
-			if ($usuario->__get('id') != '' AND $usuario->__get('nome') != '') {
-				echo 'Autenticado';
+			if ($usuario->__get('id') != '' AND $usuario->__get('nome') != '') { # caso as variáveis de sessão não estejam preenchidas, será forçado o redirecionamento para a tela de login
+
+				session_start(); # iniciando sessão
+				$_SESSION['id'] = $usuario->__get('id');
+				$_SESSION['nome'] = $usuario->__get('nome');
+				header('Location: /timeline');
 			}
 			else {
 				header('Location: /?login=error');
 			}
+		}
+
+		public function sair() {
+			session_start();
+			session_destroy();
+			header('Location: /');
 		}
 
 	}
