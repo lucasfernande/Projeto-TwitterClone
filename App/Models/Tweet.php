@@ -36,6 +36,7 @@
 					 	left join usuarios as u on(t.id_usuario = u.id)
 					  where 
 					  	t.id_usuario = :id_usuario
+					  	or t.id_usuario in(select id_usuario_seguindo from usuarios_seguidores where id_usuario = :id_usuario)
 					  order by 
 					  	t.data DESC';
 
@@ -44,6 +45,16 @@
 			$statemt->execute();
 
 			return $statemt->fetchAll(\PDO::FETCH_OBJ); # retornando um objeto literal com todos os tweets
+		}
+
+		public function remover() {
+			$query = 'delete from tweets where id = :id';
+
+			$statemt = $this->db->prepare($query);
+			$statemt->bindValue(':id', $this->__get('id'));
+
+			$statemt->execute();
+			return true;
 		}
 	}	
 

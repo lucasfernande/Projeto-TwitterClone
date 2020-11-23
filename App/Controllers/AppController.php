@@ -77,7 +77,17 @@
 				$usuario->deixarSeguirUsuario($id_usuario_seguindo);
 			}
 			header('Location: /quemseguir');
-		}	
+		}
+
+		public function remover() {
+			$this->validaAutenticacao();
+			
+			$tweet = Container::getModel('Tweet');
+			$tweet->__set('id', $_GET['id']);
+			
+			$tweet->remover();
+			header('Location: /timeline');
+		}
 	}	
 
 ?>	
